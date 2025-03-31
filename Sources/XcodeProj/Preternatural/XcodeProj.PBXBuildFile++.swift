@@ -13,29 +13,39 @@ extension PBXBuildFile {
     }
     
     private func appendToSettingsArray(value: String, forKey key: String) {
-        var currentSettings = settings ?? [:]
-        var array = (currentSettings[key] as? [String]) ?? []
+        var currentSettings: [String: BuildFileSetting] = settings ?? [:]
+        let existingValue: BuildFileSetting = currentSettings[key] ?? .array([])
         
-        if !array.contains(value) {
-            array.append(value)
+        switch existingValue {
+        case .string(let _):
+            /// Value is not an array, we will return without doing anything.
+            return
+        case .array(let array):
+            let newArray = array.appending(value)
+            currentSettings[key] = .array(newArray)
         }
         
-        currentSettings[key] = array
         settings = currentSettings
     }
     
     private func removeFromSettingsArray(value: String, forKey key: String) {
-        var currentSettings = settings ?? [:]
-        guard var array = currentSettings[key] as? [String] else {
+        var currentSettings: [String: BuildFileSetting] = settings ?? [:]
+        guard let existingValue = currentSettings[key] else {
             return
         }
         
-        array.removeAll { $0 == value }
-        
-        if array.isEmpty {
-            currentSettings.removeValue(forKey: key)
-        } else {
-            currentSettings[key] = array
+        switch existingValue {
+        case .string(let _):
+            /// Value is not an array, we will return without doing anything.
+            return
+        case .array(let array):
+            var newArray = array
+            newArray.removeAll { $0 == value }
+            if newArray.isEmpty {
+                currentSettings.removeValue(forKey: key)
+            } else {
+                currentSettings[key] = .array(newArray)
+            }
         }
         
         settings = currentSettings

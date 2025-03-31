@@ -14,7 +14,8 @@ public final class PBXProj: Decodable {
     public var objectVersion: UInt
 
     /// Project classes.
-    public var classes: [String: Any]
+    /// This appears to always be empty as defined here: http://www.monobjc.net/xcode-project-file-format.html
+    public var classes: [String: [String]]
 
     /// Project root object.
     var rootObjectReference: PBXObjectReference?
@@ -40,7 +41,7 @@ public final class PBXProj: Decodable {
     public init(rootObject: PBXProject? = nil,
                 objectVersion: UInt = Xcode.LastKnown.objectVersion,
                 archiveVersion: UInt = Xcode.LastKnown.archiveVersion,
-                classes: [String: Any] = [:],
+                classes: [String: [String]] = [:],
                 objects: [PBXObject] = []) {
         self.archiveVersion = archiveVersion
         self.objectVersion = objectVersion
@@ -72,25 +73,7 @@ public final class PBXProj: Decodable {
     /// - Parameters:
     ///   - data: data representation of pbxproj file.
     public convenience init(data: Data) throws {
-        var propertyListFormat = PropertyListSerialization.PropertyListFormat.xml
-
-        let serialized = try PropertyListSerialization.propertyList(
-            from: data,
-            options: .mutableContainersAndLeaves,
-            format: &propertyListFormat
-        )
-
-        guard let pbxProjDictionary = serialized as? [String: Any] else {
-            throw PBXProjError.malformed
-        }
-
-        let context = ProjectDecodingContext(
-            pbxProjValueReader: { key in
-                pbxProjDictionary[key]
-            }
-        )
-
-        let plistDecoder = XcodeprojPropertyListDecoder(context: context)
+        let plistDecoder = XcodeprojPropertyListDecoder(context: ProjectDecodingContext())
         let pbxproj: PBXProj = try plistDecoder.decode(PBXProj.self, from: data)
 
         self.init(
@@ -106,7 +89,7 @@ public final class PBXProj: Decodable {
         rootObject: PBXProject? = nil,
         objectVersion: UInt = Xcode.LastKnown.objectVersion,
         archiveVersion: UInt = Xcode.LastKnown.archiveVersion,
-        classes: [String: Any] = [:],
+        classes: [String: [String]] = [:],
         objects: PBXObjects
     ) {
         self.archiveVersion = archiveVersion
@@ -134,24 +117,13 @@ public final class PBXProj: Decodable {
         self.rootObjectReference = objectReferenceRepository.getOrCreate(reference: rootObjectReference, objects: objects)
         objectVersion = try container.decodeIntIfPresent(.objectVersion) ?? 0
         archiveVersion = try container.decodeIntIfPresent(.archiveVersion) ?? 1
-        classes = try container.decodeIfPresent([String: Any].self, forKey: .classes) ?? [:]
-        let objectsDictionary: [String: Any] = try container.decodeIfPresent([String: Any].self, forKey: .objects) ?? [:]
-        let objectsDictionaries: [String: [String: Any]] = (objectsDictionary as? [String: [String: Any]]) ?? [:]
+        classes = try container.decodeIfPresent([String: [String]].self, forKey: .classes) ?? [:]
+        let objectsDictionary: [String: PBXObjectDictionaryEntry] = try container.decodeIfPresent([String: PBXObjectDictionaryEntry].self, forKey: .objects) ?? [:]
 
-        let parser = PBXObjectParser(
-            userInfo: decoder.userInfo
-        )
-        try objectsDictionaries.enumerateKeysAndObjects(options: .concurrent) { key, obj, _ in
-            // swiftlint:disable force_cast
-            let reference = key as! String
-            let dictionary = obj as! [String: Any]
-            // swiftlint:enable force_cast
-            let object = try parser.parse(
-                reference: reference,
-                dictionary: dictionary
-            )
-            objects.add(object: object)
+        for entry in objectsDictionary {
+            objects.add(object: entry.value.object)
         }
+
         self.objects = objects
 
         try rootGroup()?.assignParentToChildren()
@@ -160,33 +132,12 @@ public final class PBXProj: Decodable {
     // MARK: Static Methods
 
     private static func createPBXProj(path: Path) throws -> PBXProj {
-        let (pbxProjData, pbxProjDictionary) = try PBXProj.readPBXProj(path: path)
-        let context = ProjectDecodingContext(
-            pbxProjValueReader: { key in
-                pbxProjDictionary[key]
-            }
-        )
+        let pbxProjData = try Data(contentsOf: path.url)
 
-        let plistDecoder = XcodeprojPropertyListDecoder(context: context)
+        let plistDecoder = XcodeprojPropertyListDecoder(context: ProjectDecodingContext())
         let pbxproj: PBXProj = try plistDecoder.decode(PBXProj.self, from: pbxProjData)
         try pbxproj.updateProjectName(path: path)
         return pbxproj
-    }
-
-    private static func readPBXProj(path: Path) throws -> (Data, [String: Any]) {
-        let plistXML = try Data(contentsOf: path.url)
-        var propertyListFormat = PropertyListSerialization.PropertyListFormat.xml
-        let serialized = try PropertyListSerialization.propertyList(
-            from: plistXML,
-            options: .mutableContainersAndLeaves,
-            format: &propertyListFormat
-        )
-
-        guard let pbxProjDictionary = serialized as? [String: Any] else {
-            throw PBXProjError.malformed
-        }
-
-        return (plistXML, pbxProjDictionary)
     }
 }
 
@@ -311,10 +262,9 @@ extension PBXProj {
 
 extension PBXProj: Equatable {
     public static func == (lhs: PBXProj, rhs: PBXProj) -> Bool {
-        let equalClasses = NSDictionary(dictionary: lhs.classes).isEqual(to: rhs.classes)
-        return lhs.archiveVersion == rhs.archiveVersion &&
+        lhs.archiveVersion == rhs.archiveVersion &&
             lhs.objectVersion == rhs.objectVersion &&
-            equalClasses &&
+            lhs.classes == rhs.classes &&
             lhs.objects == rhs.objects
     }
 }

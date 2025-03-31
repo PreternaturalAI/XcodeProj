@@ -1,4 +1,4 @@
-// swift-tools-version:5.10
+// swift-tools-version:6.0.0
 
 import PackageDescription
 
@@ -15,8 +15,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/tadija/AEXML.git", from: "4.6.1"),
-        .package(url: "https://github.com/kylef/PathKit.git", from: "1.0.1"),
+        .package(url: "https://github.com/tadija/AEXML.git", .upToNextMinor(from: "4.7.0")),
+        .package(url: "https://github.com/kylef/PathKit.git", .upToNextMinor(from: "1.0.1")),
         .package(url: "https://github.com/vmanot/Swallow.git", branch: "master"),
     ],
     targets: [

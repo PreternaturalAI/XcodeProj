@@ -31,12 +31,10 @@ class ProjectDecodingContext {
 
     /// Objects.
     let objects: PBXObjects
-    let pbxProjValueReader: ((String) -> Any?)?
 
-    init(pbxProjValueReader: ((String) -> Any?)? = nil) {
+    init() {
         objectReferenceRepository = PBXObjectReferenceRepository()
         objects = PBXObjects(objects: [])
-        self.pbxProjValueReader = pbxProjValueReader
     }
 }
 
@@ -48,7 +46,7 @@ extension CodingUserInfoKey {
 }
 
 /// Xcodeproj JSON decoder.
-class XcodeprojJSONDecoder: JSONDecoder, @unchecked Sendable {
+final class XcodeprojJSONDecoder: JSONDecoder, @unchecked Sendable {
     /// Default init.
     init(context: ProjectDecodingContext = ProjectDecodingContext()) {
         super.init()
@@ -57,7 +55,7 @@ class XcodeprojJSONDecoder: JSONDecoder, @unchecked Sendable {
 }
 
 /// Xcodeproj property list decoder.
-class XcodeprojPropertyListDecoder: PropertyListDecoder, @unchecked Sendable {
+final class XcodeprojPropertyListDecoder: PropertyListDecoder, @unchecked Sendable {
     /// Default init.
     init(context: ProjectDecodingContext = ProjectDecodingContext()) {
         super.init()
