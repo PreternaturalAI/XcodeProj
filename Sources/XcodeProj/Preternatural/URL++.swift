@@ -62,25 +62,57 @@ extension URL {
         </Scheme>
         """
         
-        var fileURL: URL? = nil
+        try writeXCSchemeFile(content: content, schemeName: schemeName)
+    }
+    
+    public func createTestPlanSchemeFile(for testPlan: URL, schemeName: String) throws {
+        let content = try """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <Scheme LastUpgradeVersion = "9999" version = "1.3">
+          <TestAction
+            buildConfiguration = "Debug"
+            selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+            selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+            shouldUseLaunchSchemeArgsEnv = "YES">
+            <TestPlans>
+              <TestPlanReference
+                reference = "container:\(testPlan.path(relativeTo: self).path)">
+              </TestPlanReference>
+            </TestPlans>
+          </TestAction>
+        </Scheme>
+        """
+        
+        try writeXCSchemeFile(content: content, schemeName: schemeName)
+    }
+    
+    private func writeXCSchemeFile(content: String, schemeName: String) throws {
+        var fileURL: URL?
       
         if self.isPackageURL {
             fileURL = self
-              .appending(.directory(".swiftpm"))
-              .appending(.directory("xcode"))
-              .appending(.directory("xcshareddata"))
-              .appending(.directory("xcschemes"))
-              .appending(.file("\(schemeName).xcscheme"))
+                .appending(.directory(".swiftpm"))
+                .appending(.directory("xcode"))
+                .appending(.directory("xcshareddata"))
+                .appending(.directory("xcschemes"))
+                .appending(.file("\(schemeName).xcscheme"))
         }
         
         if self.pathExtension == "xcodeproj" {
             fileURL = self
-              .appending(.directory("xcshareddata"))
-              .appending(.directory("xcschemes"))
-              .appending(.file("\(schemeName).xcscheme"))
+                .appending(.directory("xcshareddata"))
+                .appending(.directory("xcschemes"))
+                .appending(.file("\(schemeName).xcscheme"))
         }
       
         if let fileURL = fileURL {
+            let directoryURL = fileURL.deletingLastPathComponent()
+            try FileManager.default.createDirectory(
+                at: directoryURL,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+            
             try content.write(to: fileURL, atomically: true, encoding: .utf8)
         }
     }
