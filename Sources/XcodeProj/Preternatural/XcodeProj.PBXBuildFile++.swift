@@ -17,7 +17,7 @@ extension PBXBuildFile {
         let existingValue: BuildFileSetting = currentSettings[key] ?? .array([])
         
         switch existingValue {
-        case .string(let _):
+        case .string:
             /// Value is not an array, we will return without doing anything.
             return
         case .array(let array):
@@ -35,7 +35,7 @@ extension PBXBuildFile {
         }
         
         switch existingValue {
-        case .string(let _):
+        case .string:
             /// Value is not an array, we will return without doing anything.
             return
         case .array(let array):
