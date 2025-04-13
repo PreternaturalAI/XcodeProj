@@ -1,5 +1,5 @@
 
-import AEXML
+import _AEXML
 import XCTest
 @testable import XcodeProj
 

@@ -11,29 +11,30 @@ let package = Package(
     products: [
         .library(
             name: "XcodeProj",
-            targets: ["XcodeProj"]
+            targets: [
+                "XcodeProj"
+            ]
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/tadija/AEXML.git", .upToNextMinor(from: "4.7.0")),
         .package(url: "https://github.com/kylef/PathKit.git", .upToNextMinor(from: "1.0.1")),
+        .package(url: "https://github.com/vmanot/CorePersistence.git", branch: "main"),
         .package(url: "https://github.com/vmanot/Swallow.git", branch: "master"),
     ],
     targets: [
         .target(
             name: "XcodeProj",
             dependencies: [
-                .product(name: "PathKit", package: "PathKit"),
-                .product(name: "AEXML", package: "AEXML"),
+                "PathKit",
                 "Swallow"
             ],
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
-            ]
+            swiftSettings: []
         ),
         .testTarget(
             name: "XcodeProjTests",
-            dependencies: ["XcodeProj"]
+            dependencies: [
+                "XcodeProj"
+            ]
         ),
     ]
 )
