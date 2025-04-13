@@ -1,7 +1,7 @@
 import Foundation
 
 /// Project object reference repository.
-class PBXObjectReferenceRepository {
+class PBXObjectReferenceRepository: @unchecked Sendable {
     /// References.
     var references: [String: PBXObjectReference] = [:]
     let lock = NSRecursiveLock()
@@ -25,7 +25,7 @@ class PBXObjectReferenceRepository {
 }
 
 /// Context used when the project is being decoded.
-class ProjectDecodingContext {
+class ProjectDecodingContext: @unchecked Sendable {
     /// Object reference repository.
     let objectReferenceRepository: PBXObjectReferenceRepository
 
