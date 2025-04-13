@@ -25,6 +25,7 @@ let package = Package(
         .target(
             name: "XcodeProj",
             dependencies: [
+                "CorePersistence",
                 "PathKit",
                 "Swallow"
             ],

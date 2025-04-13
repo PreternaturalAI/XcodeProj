@@ -1,13 +1,21 @@
 {
-  "originHash" : "90fe95bbb1b874417f375dc50d10a34a6b8ac74ffb51d1de3a6248628f5ee825",
   "pins" : [
     {
-      "identity" : "aexml",
+      "identity" : "corepersistence",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tadija/AEXML.git",
+      "location" : "https://github.com/vmanot/CorePersistence.git",
       "state" : {
-        "revision" : "38f7d00b23ecd891e1ee656fa6aeebd6ba04ecc3",
-        "version" : "4.6.1"
+        "branch" : "main",
+        "revision" : "3de61dda6b7153bde07aa7c1fbfd44c01c82e3a8"
+      }
+    },
+    {
+      "identity" : "merge",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vmanot/Merge.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "6be92cd0d02258dc0ea4c501c8b6f61b75fe11a4"
       }
     },
     {
@@ -65,5 +73,5 @@
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }
