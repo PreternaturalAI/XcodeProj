@@ -16,6 +16,11 @@ func iosProjectData() throws -> Data {
     return try Data(contentsOf: iosProject.url)
 }
 
+func iosProjectWithExtensionsData() throws -> Data {
+    let iosProjectWithExtensions = fixturesPath() + "iOS/AppWithExtensions/AppWithExtensions.xcodeproj/project.pbxproj"
+    return try Data(contentsOf: iosProjectWithExtensions.url)
+}
+
 func fileSharedAcrossTargetsData() throws -> Data {
     let fileSharedAcrossTargetsProject = fixturesPath() + "FileSharedAcrossTargets/FileSharedAcrossTargets.xcodeproj/project.pbxproj"
     return try Data(contentsOf: fileSharedAcrossTargetsProject.url)
@@ -39,4 +44,9 @@ func iosProjectWithRelativeXCLocalSwiftPackageReferences() throws -> Data {
 func iosProjectWithXCLocalSwiftPackageReferences() throws -> Data {
     let iosProjectWithXCLocalSwiftPackageReference = fixturesPath() + "iOS/ProjectWithXCLocalSwiftPackageReferences.xcodeproj/project.pbxproj"
     return try Data(contentsOf: iosProjectWithXCLocalSwiftPackageReference.url)
+}
+
+func projectWithWrongProjectReferencesOrder() throws -> Data {
+    let iosProjectWithProjectReferences = fixturesPath() + "Xcode16ProjectReferenceOrder/Wrong.xcodeproj/project.pbxproj"
+    return try Data(contentsOf: iosProjectWithProjectReferences.url)
 }

@@ -1,7 +1,7 @@
 # XcodeProj
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-45-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-46-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Swift Package Manager](https://img.shields.io/badge/swift%20package%20manager-compatible-brightgreen.svg)](https://swift.org/package-manager/)
@@ -26,16 +26,17 @@ XcodeProj is a library written in Swift for parsing and working with Xcode proje
 
 ## Projects Using XcodeProj
 
-| Project         | Repository                                                                                   |
-| --------------- | -------------------------------------------------------------------------------------------- |
-| ProjLint        | [github.com/JamitLabs/ProjLint](https://github.com/JamitLabs/ProjLint)                       |
-| rules_xcodeproj | [github.com/buildbuddy-io/rules_xcodeproj](https://github.com/buildbuddy-io/rules_xcodeproj) |
-| Rugby           | [github.com/swiftyfinch/Rugby](https://github.com/swiftyfinch/Rugby)                         |
-| Sourcery        | [github.com/krzysztofzablocki/Sourcery](https://github.com/krzysztofzablocki/Sourcery)       |
-| Tuist           | [github.com/tuist/tuist](https://github.com/tuist/tuist)                                     |
-| XcodeGen        | [github.com/yonaskolb/XcodeGen](https://github.com/yonaskolb/XcodeGen)                       |
-| xspm            | [gitlab.com/Pyroh/xspm](https://gitlab.com/Pyroh/xspm)                                       |
-| Privacy Manifest| [github.com/stelabouras/privacy-manifest](https://github.com/stelabouras/privacy-manifest)   |
+| Project         | Repository                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------------ |
+| ProjLint        | [github.com/JamitLabs/ProjLint](https://github.com/JamitLabs/ProjLint)                           |
+| rules_xcodeproj | [github.com/buildbuddy-io/rules_xcodeproj](https://github.com/buildbuddy-io/rules_xcodeproj)     |
+| Rugby           | [github.com/swiftyfinch/Rugby](https://github.com/swiftyfinch/Rugby)                             |
+| Sourcery        | [github.com/krzysztofzablocki/Sourcery](https://github.com/krzysztofzablocki/Sourcery)           |
+| Tuist           | [github.com/tuist/tuist](https://github.com/tuist/tuist)                                         |
+| XcodeGen        | [github.com/yonaskolb/XcodeGen](https://github.com/yonaskolb/XcodeGen)                           |
+| xspm            | [gitlab.com/Pyroh/xspm](https://gitlab.com/Pyroh/xspm)                                           |
+| Privacy Manifest| [github.com/stelabouras/privacy-manifest](https://github.com/stelabouras/privacy-manifest)       |
+| XcodeProjectCLI | [github.com/wojciech-kulik/XcodeProjectCLI](https://github.com/wojciech-kulik/XcodeProjectCLI)   |
 
 If you are also leveraging XcodeProj in your project, feel free to open a PR to include it in the list above.
 
@@ -191,6 +192,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/georgenavarro"><img src="https://avatars.githubusercontent.com/u/2748028?v=4?s=100" width="100px;" alt="George Navarro"/><br /><sub><b>George Navarro</b></sub></a><br /><a href="https://github.com/tuist/XcodeProj/commits?author=georgenavarro" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Speakus"><img src="https://avatars.githubusercontent.com/u/849294?v=4?s=100" width="100px;" alt="Maxim"/><br /><sub><b>Maxim</b></sub></a><br /><a href="https://github.com/tuist/XcodeProj/commits?author=Speakus" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/bryansum"><img src="https://avatars.githubusercontent.com/u/49369?v=4?s=100" width="100px;" alt="Bryan Summersett"/><br /><sub><b>Bryan Summersett</b></sub></a><br /><a href="https://github.com/tuist/XcodeProj/commits?author=bryansum" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mikhailmulyar"><img src="https://avatars.githubusercontent.com/u/2234720?v=4?s=100" width="100px;" alt="Mikhail"/><br /><sub><b>Mikhail</b></sub></a><br /><a href="https://github.com/tuist/XcodeProj/commits?author=mikhailmulyar" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
