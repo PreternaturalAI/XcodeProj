@@ -75,6 +75,7 @@ extension PBXCopyFilesBuildPhase {
     func isEqual(to rhs: PBXCopyFilesBuildPhase) -> Bool {
         if dstPath != rhs.dstPath { return false }
         if dstSubfolderSpec != rhs.dstSubfolderSpec { return false }
+        if dstSubfolder != rhs.dstSubfolder { return false }
         if name != rhs.name { return false }
         return super.isEqual(to: rhs)
     }
@@ -319,6 +320,7 @@ extension PBXFileSystemSynchronizedBuildFileExceptionSet {
         if targetReference != rhs.targetReference { return false }
         if publicHeaders != rhs.publicHeaders { return false }
         if privateHeaders != rhs.privateHeaders { return false }
+        if platformFiltersByRelativePath != rhs.platformFiltersByRelativePath { return false }
         return super.isEqual(to: rhs)
     }
 }

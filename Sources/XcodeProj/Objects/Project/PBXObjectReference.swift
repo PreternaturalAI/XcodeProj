@@ -25,10 +25,18 @@ class PBXObjectReference: NSObject, Comparable, NSCopying {
     }
 
     /// Initializes a temporary reference
-    init(objects: PBXObjects? = nil) {
+    override init() {
+        value = "TEMP_\(UUID().uuidString)"
+        temporary = true
+        super.init()
+    }
+
+    /// Initializes a temporary reference with an objects container.
+    init(objects: PBXObjects?) {
         value = "TEMP_\(UUID().uuidString)"
         temporary = true
         self.objects = objects
+        super.init()
     }
 
     /// Initializes the reference without objects.
