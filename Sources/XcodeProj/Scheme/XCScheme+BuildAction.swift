@@ -1,6 +1,6 @@
 import _AEXML
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 public extension XCScheme {
     final class BuildAction: SerialAction {

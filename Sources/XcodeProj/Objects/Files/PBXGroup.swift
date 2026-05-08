@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 public class PBXGroup: PBXFileElement {
     // MARK: - Attributes

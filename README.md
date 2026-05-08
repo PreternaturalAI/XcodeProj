@@ -12,9 +12,16 @@
 
 XcodeProj is a library written in Swift for parsing and working with Xcode projects. It's heavily inspired by [CocoaPods XcodeProj](https://github.com/CocoaPods/Xcodeproj) and [xcode](https://www.npmjs.com/package/xcode).
 
+## Fork Notes
+
+This fork vendors PathKit source under `Dependencies/PathKit` instead of depending on the upstream Swift package. The inlined source comes from `kylef/PathKit` commit `3bfd2737b700b9a36565a8c94f4ad2b050a5e574`, and is exposed as the `XcodeProjPathKit` module.
+
+When syncing from upstream `tuist/XcodeProj`, temporarily rewrite `import XcodeProjPathKit` back to `import PathKit`, pull in upstream, then rewrite PathKit imports back to `XcodeProjPathKit`.
+
 ---
 
 - [XcodeProj](#xcodeproj)
+  - [Fork Notes](#fork-notes)
   - [Projects Using XcodeProj](#projects-using-xcodeproj)
   - [Installation](#installation)
     - [Swift Package Manager](#swift-package-manager)
@@ -70,7 +77,7 @@ git tag that represents the project’s version:
 #!/usr/bin/swift sh
 import Foundation
 import XcodeProj  // @tuist ~> 8.8.0
-import PathKit
+import XcodeProjPathKit
 
 guard CommandLine.arguments.count == 3 else {
     let arg0 = Path(CommandLine.arguments[0]).lastComponent

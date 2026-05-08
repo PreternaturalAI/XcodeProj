@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 public class PBXFileSystemSynchronizedRootGroup: PBXFileElement {
     /// It maps relative paths inside the synchronized root group to a particular file type.

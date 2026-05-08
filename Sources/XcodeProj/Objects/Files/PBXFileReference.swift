@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 ///  A PBXFileReference is used to track every external file referenced by
 ///  the project: source files, resource files, libraries, generated application files, and so on.

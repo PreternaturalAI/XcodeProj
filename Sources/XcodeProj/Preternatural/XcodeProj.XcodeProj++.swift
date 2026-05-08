@@ -2,7 +2,7 @@
 // Copyright (c) Vatsal Manot
 //
 
-import PathKit
+import XcodeProjPathKit
 
 extension XcodeProj {
     public func writePBXProj(path: String, override: Bool, outputSettings: PBXOutputSettings) throws {

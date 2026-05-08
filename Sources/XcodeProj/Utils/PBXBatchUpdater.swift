@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 // This is a helper class for quickly adding a large number of files.
 // It is forbidden to add a file to a group one by one using the PBXGroup method addFile(...) while you are working with this class.

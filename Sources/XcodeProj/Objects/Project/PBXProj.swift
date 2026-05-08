@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 /// Represents a .pbxproj file
 public final class PBXProj: Decodable {

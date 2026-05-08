@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 /// Protocol that defines how an entity can be written to disk
 public protocol Writable {

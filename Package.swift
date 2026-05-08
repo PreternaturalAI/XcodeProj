@@ -17,7 +17,6 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/kylef/PathKit.git", .upToNextMinor(from: "1.0.1")),
         .package(url: "https://github.com/vmanot/CorePersistence.git", branch: "main"),
         .package(url: "https://github.com/vmanot/Swallow.git", branch: "master"),
     ],
@@ -26,10 +25,17 @@ let package = Package(
             name: "XcodeProj",
             dependencies: [
                 "CorePersistence",
-                "PathKit",
+                "XcodeProjPathKit",
                 "Swallow"
             ],
             swiftSettings: []
+        ),
+        .target(
+            name: "XcodeProjPathKit",
+            path: "Dependencies/PathKit",
+            exclude: [
+                "LICENSE"
+            ]
         ),
         .testTarget(
             name: "XcodeProjTests",

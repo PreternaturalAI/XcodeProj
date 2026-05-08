@@ -1,6 +1,6 @@
 import _AEXML
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 public final class XCUserData: Equatable, Writable {
     // MARK: - Attributes

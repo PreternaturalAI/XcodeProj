@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 /// This is the element for the framework headers build phase.
 public final class PBXHeadersBuildPhase: PBXBuildPhase {

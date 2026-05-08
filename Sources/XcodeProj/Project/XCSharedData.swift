@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 public final class XCSharedData: Equatable, Writable {
     // MARK: - Attributes

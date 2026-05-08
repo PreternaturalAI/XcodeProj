@@ -1,4 +1,4 @@
-import PathKit
+import XcodeProjPathKit
 import XCTest
 @testable import XcodeProj
 

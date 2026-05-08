@@ -1,6 +1,6 @@
 import _AEXML
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 public extension XCScheme {
     class PathRunnable: Runnable {

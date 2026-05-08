@@ -2,7 +2,7 @@
 // Copyright (c) Vatsal Manot
 //
 
-import PathKit
+import XcodeProjPathKit
 
 extension PBXGroup {
     public func addFile(at path: String, sourceRoot: String) throws -> PBXFileReference {

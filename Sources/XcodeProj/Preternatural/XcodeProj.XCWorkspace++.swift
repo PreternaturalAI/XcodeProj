@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 extension XCWorkspace {
     public func referencedPackages(at baseURL: URL) -> [URL] {

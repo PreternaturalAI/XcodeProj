@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 /// Model that represents a .xcodeproj project.
 public final class XcodeProj: Equatable {

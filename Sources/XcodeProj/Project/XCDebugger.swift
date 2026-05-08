@@ -1,6 +1,6 @@
 import _AEXML
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 enum XCDebugger {
     /// Returns  debugger folder path relative to the given path.

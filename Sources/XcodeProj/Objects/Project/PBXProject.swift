@@ -1,5 +1,5 @@
 import Foundation
-import PathKit
+import XcodeProjPathKit
 
 public final class PBXProject: PBXObject {
     // MARK: - Attributes

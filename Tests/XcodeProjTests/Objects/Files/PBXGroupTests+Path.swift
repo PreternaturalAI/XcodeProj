@@ -1,7 +1,7 @@
 #if os(macOS) || (os(Linux) && compiler(>=6.1))
 
     import Foundation
-    import PathKit
+    import XcodeProjPathKit
     import XcodeProj
     import XCTest
 

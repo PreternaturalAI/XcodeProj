@@ -1,5 +1,5 @@
 import Foundation
-@preconcurrency import PathKit
+@preconcurrency import XcodeProjPathKit
 
 // MARK: - Xcodeproj
 

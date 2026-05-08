@@ -2,7 +2,7 @@
 // Copyright (c) Vatsal Manot
 //
 
-import PathKit
+import XcodeProjPathKit
 
 extension XCSharedData {
     public convenience init(pathString: String) throws {

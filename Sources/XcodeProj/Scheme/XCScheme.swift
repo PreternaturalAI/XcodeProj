@@ -1,6 +1,6 @@
 import _AEXML
 import Foundation
-@preconcurrency import PathKit
+@preconcurrency import XcodeProjPathKit
 
 public enum XCSchemeError: Error, CustomStringConvertible, Sendable {
     case notFound(path: Path)

@@ -1,5 +1,5 @@
 import Foundation
-@preconcurrency import PathKit
+@preconcurrency import XcodeProjPathKit
 
 public enum XCSchemeManagementError: Error, Equatable, LocalizedError, CustomStringConvertible, Sendable {
     /// Thrown when the user tries to initialize a XCSchemeManagement instace passing a path to a file that doesn't exist.

@@ -1,7 +1,7 @@
 import Foundation
 
 // swiftlint:disable all
-import PathKit
+import XcodeProjPathKit
 
 // MARK: - Path extras.
 
