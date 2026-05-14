@@ -54,8 +54,8 @@ public final class PBXBatchUpdater {
         sourceTree: PBXSourceTree = .group
     )
         throws -> PBXFileReference {
-        let groupPath = try group.fullPath(sourceRoot: sourceRoot)!
-        let filePath = groupPath + Path(fileName)
+        let groupPath: Path = try group.fullPath(sourceRoot: sourceRoot)!
+        let filePath: Path = groupPath + Path(fileName)
         return try addFile(
             to: group,
             groupPath: groupPath,
@@ -114,37 +114,37 @@ public final class PBXBatchUpdater {
     }
 
     private func groupAndGroupPathForFile(at path: Path, project: PBXProject) throws -> (PBXGroup, Path) {
-        let groupPath = path.parent()
-        if let fileParentGroup = try lazilyInstantiateGroups()[groupPath] {
+        let groupPath: Path = path.parent()
+        if let fileParentGroup: PBXGroup = try lazilyInstantiateGroups()[groupPath] {
             return (fileParentGroup, groupPath)
         }
-        let components = groupPath.components
-        let componentsCount = components.count - 1
+        let components: [String] = groupPath.components
+        let componentsCount: Int = components.count - 1
         for componentIndex in (0 ... componentsCount).reversed() {
-            let currentPathComponents = components[0 ... componentIndex]
-            let currentPath = Path(components: currentPathComponents)
-            if let rootGroup = try lazilyInstantiateGroups()[currentPath] {
-                let subgroupNames = Array(
+            let currentPathComponents: ArraySlice<String> = components[0 ... componentIndex]
+            let currentPath: Path = Path(components: currentPathComponents)
+            if let rootGroup: PBXGroup = try lazilyInstantiateGroups()[currentPath] {
+                let subgroupNames: [String] = Array(
                     components[componentIndex + 1 ... componentsCount]
                 )
-                let fileParentGroup = try createChildGroups(
+                let fileParentGroup: PBXGroup = try createChildGroups(
                     in: rootGroup,
                     groupPath: currentPath,
                     with: subgroupNames
                 )
-                let fileParentGroupPath = currentPath + Path(components: subgroupNames)
+                let fileParentGroupPath: Path = currentPath + Path(components: subgroupNames)
                 return (fileParentGroup, fileParentGroupPath)
             }
         }
-        let mainGroup = project.mainGroup!
-        let mainGroupFullPath = try mainGroup.fullPath(sourceRoot: sourceRoot)!
-        let fileParentGroup = try createChildGroups(
+        let mainGroup: PBXGroup = project.mainGroup!
+        let mainGroupFullPath: Path = try mainGroup.fullPath(sourceRoot: sourceRoot)!
+        let fileParentGroup: PBXGroup = try createChildGroups(
             in: mainGroup,
             groupPath: mainGroupFullPath,
             with: groupPath.components
         )
 
-        let fileParentGroupPath = mainGroupFullPath + Path(components: groupPath.components)
+        let fileParentGroupPath: Path = mainGroupFullPath + Path(components: groupPath.components)
         return (fileParentGroup, fileParentGroupPath)
     }
 
@@ -154,9 +154,9 @@ public final class PBXBatchUpdater {
         with names: [String]
     )
         throws -> PBXGroup {
-        var parent = group
+        var parent: PBXGroup = group
         for (index, name) in names.enumerated() {
-            let path = groupPath + Path(components: names[0 ... index])
+            let path: Path = groupPath + Path(components: names[0 ... index])
             parent = try parent.addGroup(named: name).last!
             groups?[path] = parent
         }
@@ -170,9 +170,9 @@ public final class PBXBatchUpdater {
             objectReferences = references
         } else {
             objectReferences = try Dictionary(uniqueKeysWithValues:
-                objects.fileReferences.compactMap {
-                    let fullPath = try $0.value.fullPath(sourceRoot: sourceRoot)!
-                    return (fullPath, $0.key)
+                objects.fileReferences.compactMap { (element: Dictionary<PBXObjectReference, PBXFileReference>.Element) -> (Path, PBXObjectReference)? in
+                    let fullPath: Path = try element.value.fullPath(sourceRoot: sourceRoot)!
+                    return (fullPath, element.key)
                 })
             references = objectReferences
         }
@@ -185,9 +185,9 @@ public final class PBXBatchUpdater {
             unwrappedGroups = groups
         } else {
             unwrappedGroups = try Dictionary(uniqueKeysWithValues:
-                objects.groups.compactMap {
-                    let fullPath = try $0.value.fullPath(sourceRoot: sourceRoot)!
-                    return (fullPath, $0.value)
+                objects.groups.compactMap { (element: Dictionary<PBXObjectReference, PBXGroup>.Element) -> (Path, PBXGroup)? in
+                    let fullPath: Path = try element.value.fullPath(sourceRoot: sourceRoot)!
+                    return (fullPath, element.value)
                 })
             groups = unwrappedGroups
         }

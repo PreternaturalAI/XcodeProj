@@ -45,10 +45,10 @@ public final class XCUserData: Equatable, Writable {
         }
         userName = path.lastComponentWithoutExtension
 
-        let schemesPath = XCScheme.schemesPath(path)
+        let schemesPath: Path = XCScheme.schemesPath(path)
         schemes = schemesPath
             .glob("*.xcscheme")
-            .compactMap { try? XCScheme(path: $0) }
+            .compactMap { (path: Path) -> XCScheme? in try? XCScheme(path: path) }
         schemeManagement = try? XCSchemeManagement(path: XCSchemeManagement.path(schemesPath))
 
         breakpoints = try? XCBreakpointList(path: XCBreakpointList.path(XCDebugger.path(path)))
@@ -75,8 +75,8 @@ public final class XCUserData: Equatable, Writable {
         guard !schemes.isEmpty else { return }
 
         try XCScheme.schemesPath(path).mkpath()
-        for scheme in schemes {
-            let schemePath = XCScheme.path(path, schemeName: scheme.name)
+        for scheme: XCScheme in schemes {
+            let schemePath: Path = XCScheme.path(path, schemeName: scheme.name)
             try scheme.write(path: schemePath, override: override)
         }
     }
@@ -84,7 +84,7 @@ public final class XCUserData: Equatable, Writable {
     func writeSchemeManagement(path: Path, override: Bool) throws {
         guard let schemeManagement else { return }
 
-        let schemesPath = XCScheme.schemesPath(path)
+        let schemesPath: Path = XCScheme.schemesPath(path)
         try schemesPath.mkpath()
         try schemeManagement.write(path: XCSchemeManagement.path(schemesPath), override: override)
     }
@@ -92,7 +92,7 @@ public final class XCUserData: Equatable, Writable {
     func writeBreakpoints(path: Path, override: Bool) throws {
         guard let breakpoints else { return }
 
-        let debuggerPath = XCDebugger.path(path)
+        let debuggerPath: Path = XCDebugger.path(path)
         try debuggerPath.mkpath()
         try breakpoints.write(path: XCBreakpointList.path(debuggerPath), override: override)
     }

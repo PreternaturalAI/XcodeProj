@@ -21,8 +21,8 @@ public final class XCWorkspace: Writable, Equatable {
         guard path.exists else {
             throw XCWorkspaceError.notFound(path: path)
         }
-        let xcworkspaceDataPaths = path.glob("*.xcworkspacedata")
-        if let xcworkspaceDataPath = xcworkspaceDataPaths.first {
+        let xcworkspaceDataPaths: [Path] = path.glob("*.xcworkspacedata")
+        if let xcworkspaceDataPath: Path = xcworkspaceDataPaths.first {
             try self.init(data: XCWorkspaceData(path: xcworkspaceDataPath), path: path)
         } else {
             self.init()
@@ -56,7 +56,7 @@ public final class XCWorkspace: Writable, Equatable {
     // MARK: - Writable
 
     public func write(path: Path, override: Bool = true) throws {
-        let dataPath = path + "contents.xcworkspacedata"
+        let dataPath: Path = path + "contents.xcworkspacedata"
         if override, dataPath.exists {
             if let existingContent: String = try? dataPath.read(),
                existingContent == data.rawContents() {

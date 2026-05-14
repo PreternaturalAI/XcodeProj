@@ -167,11 +167,11 @@ public extension PBXFileElement {
         case .group?:
             let groupPath: Path?
 
-            if let group = parent {
+            if let group: PBXFileElement = parent {
                 groupPath = try group.fullPath(sourceRoot: sourceRoot) ?? sourceRoot
             } else {
-                let projectObjects = try objects()
-                let isThisElementRoot = projectObjects.projects.values.first(where: { $0.mainGroup == self }) != nil
+                let projectObjects: PBXObjects = try objects()
+                let isThisElementRoot: Bool = projectObjects.projects.values.first(where: { (project: PBXProject) -> Bool in project.mainGroup == self }) != nil
                 if isThisElementRoot {
                     if let path {
                         return sourceRoot + Path(path)
@@ -180,14 +180,14 @@ public extension PBXFileElement {
                 }
 
                 // Fallback if parent is nil and it's not root element
-                guard let group = projectObjects.groups.first(where: { $0.value.childrenReferences.contains(reference) }) else {
+                guard let group: Dictionary<PBXObjectReference, PBXGroup>.Element = projectObjects.groups.first(where: { (element: Dictionary<PBXObjectReference, PBXGroup>.Element) -> Bool in element.value.childrenReferences.contains(reference) }) else {
                     throw PBXProjError.invalidGroupPath(sourceRoot: sourceRoot, elementPath: path)
                 }
                 groupPath = try group.value.fullPath(sourceRoot: sourceRoot)
             }
 
             guard let fullGroupPath: Path = groupPath else { return nil }
-            guard let filePath = self is PBXVariantGroup ? try baseVariantGroupPath() : path else { return fullGroupPath }
+            guard let filePath: String = self is PBXVariantGroup ? try baseVariantGroupPath() : path else { return fullGroupPath }
             return fullGroupPath + filePath
         default:
             return nil

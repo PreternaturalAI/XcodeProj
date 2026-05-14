@@ -29,22 +29,22 @@ public final class XcodeProj: Equatable {
         var userData: [XCUserData]
 
         if !path.exists { throw XCodeProjError.notFound(path: path) }
-        guard let pbxprojPath = path.glob("*.pbxproj").first else {
+        guard let pbxprojPath: Path = path.glob("*.pbxproj").first else {
             throw XCodeProjError.pbxprojNotFound(path: path)
         }
         pbxproj = try PBXProj(path: pbxprojPath)
-        let xcworkspacePaths = path.glob("*.xcworkspace")
+        let xcworkspacePaths: [Path] = path.glob("*.xcworkspace")
         if xcworkspacePaths.isEmpty {
             workspace = XCWorkspace()
         } else {
             workspace = try XCWorkspace(path: xcworkspacePaths.first!)
         }
-        let sharedDataPath = path + "xcshareddata"
+        let sharedDataPath: Path = path + "xcshareddata"
         sharedData = try? XCSharedData(path: sharedDataPath)
 
         userData = XCUserData.path(path)
             .glob("*.xcuserdatad")
-            .compactMap { try? XCUserData(path: $0) }
+            .compactMap { (path: Path) -> XCUserData? in try? XCUserData(path: path) }
 
         self.path = path
         self.pbxproj = pbxproj
@@ -173,7 +173,7 @@ extension XcodeProj: Writable {
     /// - Parameter outputSettings: Controls the writing of various files.
     ///   If false will throw error if user data already exists at the given path.
     public func writeUserData(path: Path, override: Bool = true) throws {
-        for userData in userData {
+        for userData: XCUserData in userData {
             try userData.write(path: XCUserData.path(path, userName: userData.userName), override: override)
         }
     }
@@ -206,8 +206,8 @@ extension XcodeProj: Writable {
     public func writeSchemes(path: Path, override: Bool = true) throws {
         try sharedData?.writeSchemes(path: XCSharedData.path(path), override: override)
 
-        for userData in userData {
-            let userDataPath = XCUserData.path(path, userName: userData.userName)
+        for userData: XCUserData in userData {
+            let userDataPath: Path = XCUserData.path(path, userName: userData.userName)
             try userData.writeSchemes(path: userDataPath, override: override)
         }
     }
@@ -239,11 +239,11 @@ extension XcodeProj: Writable {
     ///   If true will remove all existing debugger data before writing.
     ///   If false will throw error if breakpoints file exists at the given path.
     public func writeBreakPoints(path: Path, override: Bool = true) throws {
-        let sharedDataPath = XcodeProj.sharedDataPath(path)
+        let sharedDataPath: Path = XcodeProj.sharedDataPath(path)
         try sharedData?.writeBreakpoints(path: sharedDataPath, override: override)
 
-        for userData in userData {
-            let userDataPath = XCUserData.path(path, userName: userData.userName)
+        for userData: XCUserData in userData {
+            let userDataPath: Path = XCUserData.path(path, userName: userData.userName)
             try userData.writeBreakpoints(path: userDataPath, override: override)
         }
     }

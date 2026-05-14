@@ -38,11 +38,11 @@ public final class XCSharedData: Equatable, Writable {
         }
         schemes = XCScheme.schemesPath(path)
             .glob("*.xcscheme")
-            .compactMap { try? XCScheme(path: $0) }
+            .compactMap { (path: Path) -> XCScheme? in try? XCScheme(path: path) }
 
         breakpoints = try? XCBreakpointList(path: XCBreakpointList.path(XCDebugger.path(path)))
 
-        let workspaceSettingsPath = path + "WorkspaceSettings.xcsettings"
+        let workspaceSettingsPath: Path = path + "WorkspaceSettings.xcsettings"
         if workspaceSettingsPath.exists {
             workspaceSettings = try WorkspaceSettings.at(path: workspaceSettingsPath)
         } else {
@@ -67,7 +67,7 @@ public final class XCSharedData: Equatable, Writable {
     }
 
     func writeSchemes(path: Path, override: Bool) throws {
-        let schemesPath = XCScheme.schemesPath(path)
+        let schemesPath: Path = XCScheme.schemesPath(path)
         if override, schemesPath.exists {
             try schemesPath.delete()
         }
@@ -75,14 +75,14 @@ public final class XCSharedData: Equatable, Writable {
         guard !schemes.isEmpty else { return }
 
         try schemesPath.mkpath()
-        for scheme in schemes {
-            let schemePath = XCScheme.path(path, schemeName: scheme.name)
+        for scheme: XCScheme in schemes {
+            let schemePath: Path = XCScheme.path(path, schemeName: scheme.name)
             try scheme.write(path: schemePath, override: override)
         }
     }
 
     func writeBreakpoints(path: Path, override: Bool) throws {
-        let debuggerPath = XCDebugger.path(path)
+        let debuggerPath: Path = XCDebugger.path(path)
         if override, debuggerPath.exists {
             try debuggerPath.delete()
         }

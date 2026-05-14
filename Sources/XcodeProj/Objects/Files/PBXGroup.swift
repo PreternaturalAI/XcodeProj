@@ -201,25 +201,24 @@ public extension PBXGroup {
         override: Bool = true,
         validatePresence: Bool = true
     ) throws -> PBXFileReference {
-        let projectObjects = try objects()
+        let projectObjects: PBXObjects = try objects()
         if validatePresence, !filePath.exists {
             throw XcodeprojEditingError.unexistingFile(filePath)
         }
-        let groupPath = try fullPath(sourceRoot: sourceRoot)
+        let groupPath: Path? = try fullPath(sourceRoot: sourceRoot)
 
-        if override, let existingFileReference = try projectObjects.fileReferences.first(where: {
-            // Optimization: compare lastComponent before fullPath compare
-            guard let fileRefPath = $0.value.path else {
-                return try filePath == $0.value.fullPath(sourceRoot: sourceRoot)
+        if override, let existingFileReference: Dictionary<PBXObjectReference, PBXFileReference>.Element = try projectObjects.fileReferences.first(where: { (element: Dictionary<PBXObjectReference, PBXFileReference>.Element) -> Bool in
+            guard let fileRefPath: String = element.value.path else {
+                return try filePath == element.value.fullPath(sourceRoot: sourceRoot)
             }
-            let fileRefLastPathComponent = fileRefPath.split(separator: "/").last!
+            let fileRefLastPathComponent: Substring = fileRefPath.split(separator: "/").last!
             if filePath.lastComponent == fileRefLastPathComponent {
-                return try filePath == $0.value.fullPath(sourceRoot: sourceRoot)
+                return try filePath == element.value.fullPath(sourceRoot: sourceRoot)
             }
             return false
         }) {
             if !childrenReferences.contains(existingFileReference.key) {
-                existingFileReference.value.path = groupPath.flatMap { filePath.relative(to: $0) }?.string
+                existingFileReference.value.path = groupPath.flatMap { (gp: Path) -> Path in filePath.relative(to: gp) }?.string
                 childrenReferences.append(existingFileReference.key)
             }
             return existingFileReference.value
@@ -227,7 +226,7 @@ public extension PBXGroup {
 
         let path: String? = switch sourceTree {
         case .group:
-            groupPath.map { filePath.relative(to: $0) }?.string
+            groupPath.map { (gp: Path) -> Path in filePath.relative(to: gp) }?.string
         case .sourceRoot:
             filePath.relative(to: sourceRoot).string
         case .absolute,

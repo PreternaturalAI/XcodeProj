@@ -5,17 +5,9 @@
 import Foundation
 import XcodeProjPathKit
 
-extension XCSharedData {
-    public convenience init(pathString: String) throws {
-        let path = Path(pathString)
-        let sharedDataPath = path + "xcshareddata"
-        try self.init(path: sharedDataPath)
-    }
-
+extension XCScheme {
     public convenience init(url: URL) throws {
-        let path = Path(url.path)
-        let sharedDataPath = path + "xcshareddata"
-        try self.init(path: sharedDataPath)
+        try self.init(path: Path(url.path))
     }
 
     public func write(pathString: String, override: Bool) throws {
