@@ -6,7 +6,7 @@
       "location" : "https://github.com/vmanot/CorePersistence.git",
       "state" : {
         "branch" : "main",
-        "revision" : "712df388b036f7510223f8c201324223fb98ec74"
+        "revision" : "1b2d764ed76d2d6bfebb3d47a367d2bb10a43fd6"
       }
     },
     {
@@ -15,7 +15,7 @@
       "location" : "https://github.com/vmanot/Merge.git",
       "state" : {
         "branch" : "master",
-        "revision" : "be3f70217e5cd8196f656794021fdfa44cc4b996"
+        "revision" : "c6147e30ce1a25b8db4f4207abd2443dab6008f3"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/vmanot/Swallow.git",
       "state" : {
         "branch" : "master",
-        "revision" : "65c44f8fc616cb73079b66c63496a1c408dd918a"
+        "revision" : "1395646a26fd4468db266699b580635e8e67d43c"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "03cc312c2c933ed87abace34044a5dff7a3117c1",
-        "version" : "1.5.0"
+        "revision" : "fea17c02d767f46b23070fdfdacc28a03a39232a",
+        "version" : "1.5.1"
       }
     },
     {
