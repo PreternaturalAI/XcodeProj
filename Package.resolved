@@ -15,7 +15,7 @@
       "location" : "https://github.com/vmanot/Merge.git",
       "state" : {
         "branch" : "master",
-        "revision" : "c6147e30ce1a25b8db4f4207abd2443dab6008f3"
+        "revision" : "430db13a463e9e478348c3b4e3db77236141a0a9"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/vmanot/Swallow.git",
       "state" : {
         "branch" : "master",
-        "revision" : "1395646a26fd4468db266699b580635e8e67d43c"
+        "revision" : "15f02c649c39f682ee6801b8ec2588eb97788bab"
       }
     },
     {
