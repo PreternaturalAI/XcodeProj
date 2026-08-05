@@ -14,7 +14,7 @@ extension XCWorkspaceDataElement {
         switch self {
             case .file(let fileRef):
                 allFilePaths.append(fileRef.location.url(for: baseURL, currentGroupURL: currentGroupURL))
-            case .group(let groupRef):
+            case .group(let groupRef), .fileSystemSynchronizedGroup(let groupRef):
                 for child in groupRef.children {
                     let updatedBaseURL = groupRef.location.updatedBaseURL(for: baseURL)
                     allFilePaths.append(contentsOf: child.referencedFiles(at: baseURL, currentGroupURL: updatedBaseURL))
