@@ -18,15 +18,13 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vmanot/CorePersistence.git", branch: "main"),
-        .package(url: "https://github.com/vmanot/Swallow.git", branch: "master"),
     ],
     targets: [
         .target(
             name: "XcodeProj",
             dependencies: [
-                "CorePersistence",
+                .product(name: "_AEXML", package: "CorePersistence"),
                 "XcodeProjPathKit",
-                "Swallow"
             ],
             swiftSettings: []
         ),

@@ -21,8 +21,7 @@ extension PBXBuildFile {
             /// Value is not an array, we will return without doing anything.
             return
         case .array(let array):
-            let newArray = array.appending(value)
-            currentSettings[key] = .array(newArray)
+            currentSettings[key] = .array(array + [value])
         }
         
         settings = currentSettings
@@ -51,4 +50,3 @@ extension PBXBuildFile {
         settings = currentSettings
     }
 }
-

@@ -2,11 +2,15 @@
 // Copyright (c) Vatsal Manot
 //
 
-import FoundationX
+import Foundation
+import XcodeProjPathKit
 
 extension URL {
     public var isPackageURL: Bool {
-        return self.pathExtension == "" && self.appendingPathComponent("Package.swift")._isValidFileURLCheckingIfExistsIfNecessary()
+        pathExtension.isEmpty && FileManager.default.fileExists(
+            atPath: appendingPathComponent("Package.swift", isDirectory: false)
+                .path(percentEncoded: false)
+        )
     }
   
     /// The format of the `xcscheme` file has been taken from:
@@ -66,7 +70,7 @@ extension URL {
     }
     
     public func createTestPlanSchemeFile(for testPlan: URL, schemeName: String) throws {
-        let content = try """
+        let content = """
         <?xml version="1.0" encoding="UTF-8"?>
         <Scheme LastUpgradeVersion = "9999" version = "1.3">
           <TestAction
@@ -76,7 +80,7 @@ extension URL {
             shouldUseLaunchSchemeArgsEnv = "YES">
             <TestPlans>
               <TestPlanReference
-                reference = "container:\(testPlan.path(relativeTo: self).path)">
+                reference = "container:\(Path(testPlan.path).relative(to: Path(path)).string)">
               </TestPlanReference>
             </TestPlans>
           </TestAction>
@@ -91,18 +95,18 @@ extension URL {
       
         if self.isPackageURL {
             fileURL = self
-                .appending(.directory(".swiftpm"))
-                .appending(.directory("xcode"))
-                .appending(.directory("xcshareddata"))
-                .appending(.directory("xcschemes"))
-                .appending(.file("\(schemeName).xcscheme"))
+                .appendingPathComponent(".swiftpm", isDirectory: true)
+                .appendingPathComponent("xcode", isDirectory: true)
+                .appendingPathComponent("xcshareddata", isDirectory: true)
+                .appendingPathComponent("xcschemes", isDirectory: true)
+                .appendingPathComponent("\(schemeName).xcscheme", isDirectory: false)
         }
         
         if self.pathExtension == "xcodeproj" {
             fileURL = self
-                .appending(.directory("xcshareddata"))
-                .appending(.directory("xcschemes"))
-                .appending(.file("\(schemeName).xcscheme"))
+                .appendingPathComponent("xcshareddata", isDirectory: true)
+                .appendingPathComponent("xcschemes", isDirectory: true)
+                .appendingPathComponent("\(schemeName).xcscheme", isDirectory: false)
         }
       
         if let fileURL = fileURL {
@@ -116,4 +120,5 @@ extension URL {
             try content.write(to: fileURL, atomically: true, encoding: .utf8)
         }
     }
+
 }

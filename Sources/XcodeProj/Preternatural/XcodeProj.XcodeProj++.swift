@@ -121,7 +121,7 @@ extension XcodeProj {
         if let root = pbxproj.rootObject {
             for package in root.remotePackages {
                 if let repositoryURL = package.repositoryURL {
-                    remotePackageURLs.append(repositoryURL)
+                    remotePackageURLs.insert(repositoryURL)
                 }
             }
         }
