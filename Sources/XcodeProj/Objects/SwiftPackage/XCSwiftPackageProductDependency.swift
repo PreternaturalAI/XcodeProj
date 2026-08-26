@@ -18,8 +18,8 @@ public class XCSwiftPackageProductDependency: PBXContainerItem, PlistSerializabl
         }
     }
 
-    /// Is it a Plugin.
-    var isPlugin: Bool
+    /// Whether this dependency identifies a build-tool plug-in product.
+    public var isPlugin: Bool
 
     // MARK: - Init
 
