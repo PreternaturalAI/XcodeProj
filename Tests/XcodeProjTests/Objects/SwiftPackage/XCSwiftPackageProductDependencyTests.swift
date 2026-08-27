@@ -79,6 +79,22 @@ final class XCSwiftPackageProductDependencyTests: XCTestCase {
         ]))
     }
 
+    func test_plistValuesWithLocalPackage() throws {
+        let proj = PBXProj()
+        let package = XCLocalSwiftPackageReference(relativePath: "../LocalPackage")
+        let subject = XCSwiftPackageProductDependency(productName: "product", package: package)
+
+        let got = try subject.plistKeyAndValue(proj: proj, reference: "reference")
+
+        XCTAssertIdentical(subject.referencedPackage, package)
+        XCTAssertNil(subject.package)
+        XCTAssertEqual(got.value, .dictionary([
+            "isa": "XCSwiftPackageProductDependency",
+            "productName": "product",
+            "package": .string(.init(package.reference.value, comment: "XCLocalSwiftPackageReference \"\(package.name ?? "")\"")),
+        ]))
+    }
+
     func test_equal() {
         // Given
         let package = XCRemoteSwiftPackageReference(repositoryURL: "repository")

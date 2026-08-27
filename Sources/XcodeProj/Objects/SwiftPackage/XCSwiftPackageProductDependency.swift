@@ -8,10 +8,15 @@ public class XCSwiftPackageProductDependency: PBXContainerItem, PlistSerializabl
     /// Package reference.
     var packageReference: PBXObjectReference?
 
-    /// Package the product dependency refers to.
+    /// Package declaration the product belongs to, whether remote or local.
+    public var referencedPackage: PBXContainerItem? {
+        packageReference?.getObject()
+    }
+
+    /// Remote package the product dependency refers to.
     public var package: XCRemoteSwiftPackageReference? {
         get {
-            packageReference?.getObject()
+            referencedPackage as? XCRemoteSwiftPackageReference
         }
         set {
             packageReference = newValue?.reference
@@ -24,7 +29,7 @@ public class XCSwiftPackageProductDependency: PBXContainerItem, PlistSerializabl
     // MARK: - Init
 
     public init(productName: String,
-                package: XCRemoteSwiftPackageReference? = nil,
+                package: PBXContainerItem? = nil,
                 isPlugin: Bool = false) {
         self.productName = productName
         packageReference = package?.reference
@@ -57,8 +62,17 @@ public class XCSwiftPackageProductDependency: PBXContainerItem, PlistSerializabl
     func plistKeyAndValue(proj: PBXProj, reference: String) throws -> (key: CommentedString, value: PlistValue) {
         var dictionary = try super.plistValues(proj: proj, reference: reference)
         dictionary["isa"] = .string(CommentedString(XCSwiftPackageProductDependency.isa))
-        if let package {
-            dictionary["package"] = .string(.init(package.reference.value, comment: "XCRemoteSwiftPackageReference \"\(package.name ?? "")\""))
+        if let package = referencedPackage {
+            let comment: String
+            switch package {
+            case let package as XCRemoteSwiftPackageReference:
+                comment = "XCRemoteSwiftPackageReference \"\(package.name ?? "")\""
+            case let package as XCLocalSwiftPackageReference:
+                comment = "XCLocalSwiftPackageReference \"\(package.name ?? "")\""
+            default:
+                comment = String(describing: type(of: package))
+            }
+            dictionary["package"] = .string(.init(package.reference.value, comment: comment))
         }
         if isPlugin {
             dictionary["productName"] = .string(.init("plugin:" + productName))
