@@ -415,6 +415,12 @@ final class XCSchemeIntegrationTests: XCTestCase {
         // Given
         let scheme = try XCScheme(path: runPostActionsOnFailureSchemePath)
         let subject = try XCTUnwrap(scheme.buildAction)
+        subject.preActions = [
+            XCScheme.ExecutionAction(
+                scriptText: "echo",
+                shellToInvoke: "/bin/zsh"
+            ),
+        ]
 
         // When
         let xml = subject.xmlElement()
@@ -422,6 +428,14 @@ final class XCSchemeIntegrationTests: XCTestCase {
 
         // Then
         XCTAssertEqual(reconstructedSubject, subject)
+        XCTAssertEqual(
+            reconstructedSubject.preActions.first?.actionType,
+            XCScheme.ExecutionAction.shellScriptActionType
+        )
+        XCTAssertNotEqual(
+            XCScheme.ExecutionAction(scriptText: "echo", shellToInvoke: "/bin/sh"),
+            XCScheme.ExecutionAction(scriptText: "echo", shellToInvoke: "/bin/zsh")
+        )
     }
 
     func test_buildAction_buildArchitectures() throws {
