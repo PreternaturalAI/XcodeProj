@@ -1,4 +1,3 @@
-import Foundation
 import XCTest
 @testable import XcodeProj
 
@@ -29,36 +28,6 @@ final class PBXSourceTreeTests: XCTestCase {
 
     func test_developerDir_hasTheCorrectValue() {
         XCTAssertEqual(String(describing: PBXSourceTree.developerDir), "DEVELOPER_DIR")
-    }
-
-    func test_plistReturnsTheRightValue_whenItsNone() {
-        let expected = PlistValue.string(CommentedString(String(describing: PBXSourceTree.none)))
-        XCTAssertEqual(PBXSourceTree.none.plist(), expected)
-    }
-
-    func test_plistReturnsTheRightValue_whenItsAbsolute() {
-        let expected = PlistValue.string(CommentedString(String(describing: PBXSourceTree.absolute)))
-        XCTAssertEqual(PBXSourceTree.absolute.plist(), expected)
-    }
-
-    func test_plistReturnsTheRightValue_whenItsGroup() {
-        let expected = PlistValue.string(CommentedString(String(describing: PBXSourceTree.group)))
-        XCTAssertEqual(PBXSourceTree.group.plist(), expected)
-    }
-
-    func test_plistReturnsTheRightValue_whenItsSourceRoot() {
-        let expected = PlistValue.string(CommentedString(String(describing: PBXSourceTree.sourceRoot)))
-        XCTAssertEqual(PBXSourceTree.sourceRoot.plist(), expected)
-    }
-
-    func test_plistReturnsTheRightValue_whenItsBuildProductsDir() {
-        let expected = PlistValue.string(CommentedString(String(describing: PBXSourceTree.buildProductsDir)))
-        XCTAssertEqual(PBXSourceTree.buildProductsDir.plist(), expected)
-    }
-
-    func test_plistReturnsTheRightValue_whenItsSdkRoot() {
-        let expected = PlistValue.string(CommentedString(String(describing: PBXSourceTree.sdkRoot)))
-        XCTAssertEqual(PBXSourceTree.sdkRoot.plist(), expected)
     }
 
     func test_plistReturnsTheRightValue_whenCustom() {

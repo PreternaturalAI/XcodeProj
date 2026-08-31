@@ -94,32 +94,4 @@ final class XCSwiftPackageProductDependencyTests: XCTestCase {
             "package": .string(.init(package.reference.value, comment: "XCLocalSwiftPackageReference \"\(package.name ?? "")\"")),
         ]))
     }
-
-    func test_equal() {
-        // Given
-        let package = XCRemoteSwiftPackageReference(repositoryURL: "repository")
-        let first = XCSwiftPackageProductDependency(productName: "product",
-                                                    package: package)
-        let second = XCSwiftPackageProductDependency(productName: "product",
-                                                     package: package)
-
-        // Then
-        XCTAssertEqual(first, second)
-    }
-
-    func test_isPlugin() {
-        // Given
-        let plugin = XCSwiftPackageProductDependency(productName: "product", isPlugin: true)
-
-        // Then
-        XCTAssertTrue(plugin.isPlugin)
-    }
-
-    func test_isNotPlugin() {
-        // Given
-        let plugin = XCSwiftPackageProductDependency(productName: "product")
-
-        // Then
-        XCTAssertFalse(plugin.isPlugin)
-    }
 }

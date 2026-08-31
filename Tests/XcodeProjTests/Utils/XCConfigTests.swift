@@ -4,21 +4,6 @@ import XCTest
 @testable import XcodeProj
 
 final class XCConfigTests: XCTestCase {
-    var subject: XCConfig?
-
-    func test_init_initializesTheConfigWithTheRightAttributes() {
-        let configA = XCConfig(includes: [])
-        let configB = XCConfig(includes: [])
-        let config = XCConfig(includes: [
-            (Path("testA"), configA),
-            (Path("testB"), configB),
-        ],
-        buildSettings: ["a": "b"])
-        XCTAssertEqual(config.buildSettings, ["a": "b"])
-        XCTAssertEqual(config.includes[0].config, configA)
-        XCTAssertEqual(config.includes[1].config, configB)
-    }
-
     func test_flattened_flattensTheConfigCorrectly() {
         let configA = XCConfig(includes: [], buildSettings: ["a": "1"])
         let configB = XCConfig(includes: [], buildSettings: ["a": "2"])

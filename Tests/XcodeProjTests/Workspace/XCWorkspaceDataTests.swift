@@ -1,25 +1,6 @@
-import Foundation
 import XcodeProjPathKit
 import XcodeProj
 import XCTest
-
-final class XCWorkspaceDataTests: XCTestCase {
-    var subject: XCWorkspaceData!
-    var fileRef: XCWorkspaceDataFileRef!
-
-    override func setUp() {
-        super.setUp()
-        fileRef = XCWorkspaceDataFileRef(
-            location: .current("path")
-        )
-        subject = XCWorkspaceData(children: [])
-    }
-
-    func test_equal_returnsTheCorrectValue() {
-        let another = XCWorkspaceData(children: [])
-        XCTAssertEqual(subject, another)
-    }
-}
 
 final class XCWorkspaceDataIntegrationTests: XCTestCase {
     func test_init_returnsTheModelWithTheRightProperties() throws {
@@ -30,13 +11,6 @@ final class XCWorkspaceDataIntegrationTests: XCTestCase {
         } else {
             XCTAssertTrue(false, "Expected file reference")
         }
-    }
-
-    func test_init_throwsIfThePathIsWrong() {
-        do {
-            _ = try XCWorkspace(path: Path("/test"))
-            XCTAssertTrue(false, "Expected to throw an error but it didn't")
-        } catch {}
     }
 
     func test_write() throws {

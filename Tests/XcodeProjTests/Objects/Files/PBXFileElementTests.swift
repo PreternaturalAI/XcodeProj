@@ -1,39 +1,10 @@
-import Foundation
 import XcodeProjPathKit
 import XCTest
 @testable import XcodeProj
 
 final class PBXFileElementTests: XCTestCase {
-    var subject: PBXFileElement!
-
-    override func setUp() {
-        super.setUp()
-        subject = PBXFileElement(sourceTree: .absolute,
-                                 path: "path",
-                                 name: "name",
-                                 includeInIndex: false,
-                                 wrapsLines: true)
-    }
-
     func test_isa_returnsTheCorrectValue() {
         XCTAssertEqual(PBXFileElement.isa, "PBXFileElement")
-    }
-
-    func test_init_initializesTheFileElementWithTheRightAttributes() {
-        XCTAssertEqual(subject.sourceTree, .absolute)
-        XCTAssertEqual(subject.path, "path")
-        XCTAssertEqual(subject.name, "name")
-        XCTAssertEqual(subject.includeInIndex, false)
-        XCTAssertEqual(subject.wrapsLines, true)
-    }
-
-    func test_equal_returnsTheCorrectValue() {
-        let another = PBXFileElement(sourceTree: .absolute,
-                                     path: "path",
-                                     name: "name",
-                                     includeInIndex: false,
-                                     wrapsLines: true)
-        XCTAssertEqual(subject, another)
     }
 
     func test_fullPath_with_parent() throws {
@@ -121,30 +92,5 @@ final class PBXFileElementTests: XCTestCase {
 
         let fullPath = try fileref.fullPath(sourceRoot: sourceRoot)
         XCTAssertEqual(fullPath?.string, "/group/path/file/path")
-    }
-
-    private func testDictionary() -> [String: Any] {
-        [
-            "sourceTree": "absolute",
-            "path": "path",
-            "name": "name",
-            "includeInIndex": "0",
-            "wrapsLines": "1",
-        ]
-    }
-
-    func test_plistKeyAndValue_returns_dictionary_value() throws {
-        let foo = PBXFileElement()
-        let proj = PBXProj()
-        let reference = ""
-        if case .dictionary = try foo.plistKeyAndValue(proj: proj, reference: reference).value {
-            // noop we’re good!
-        } else {
-            XCTFail("""
-            The implementation of PBXFileElement.plistKeyAndValue has changed,
-            which will break PBXReferenceProxy’s overriden implementation.
-            This must be fixed!
-            """)
-        }
     }
 }

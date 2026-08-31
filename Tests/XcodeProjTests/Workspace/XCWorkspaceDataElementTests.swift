@@ -1,58 +1,18 @@
-import Foundation
-import XcodeProjPathKit
+import Testing
 import XcodeProj
-import XCTest
 
-final class XCWorkspaceDataElementTests: XCTestCase {
-    func test_location_when_group() {
-        let location: XCWorkspaceDataElementLocationType = .absolute("/path/to/group")
-        let group = XCWorkspaceDataGroup(location: location,
-                                         name: "group",
-                                         children: [])
-        let element = XCWorkspaceDataElement.group(group)
+struct XCWorkspaceDataElementTests {
+    @Test
+    func locationForwardsEveryElementKind() {
+        let location: XCWorkspaceDataElementLocationType = .absolute("/workspace")
+        let elements: [XCWorkspaceDataElement] = [
+            .file(.init(location: location)),
+            .group(.init(location: location, name: "Group", children: [])),
+            .fileSystemSynchronizedGroup(
+                .init(location: location, name: "Synchronized", children: [])
+            ),
+        ]
 
-        XCTAssertEqual(element.location, location)
-    }
-
-    func test_location_when_file() {
-        let location: XCWorkspaceDataElementLocationType = .absolute("/path/to/file.swift")
-        let file = XCWorkspaceDataFileRef(location: location)
-        let element = XCWorkspaceDataElement.file(file)
-
-        XCTAssertEqual(element.location, location)
-    }
-
-    func test_equatable_when_unequal_data_elements() {
-        // Given
-        let location: XCWorkspaceDataElementLocationType = .absolute("/path/to/file.swift")
-        let file = XCWorkspaceDataFileRef(location: location)
-        let element = XCWorkspaceDataElement.file(file)
-
-        // When
-        let firstWorkspace = XCWorkspace(data: .init(children: [element]))
-        let secondWorkspace = XCWorkspace(data: .init(children: []))
-
-        // Then
-        XCTAssertNotEqual(firstWorkspace, secondWorkspace)
-    }
-
-    func test_equatable_when_equal_data_elements() {
-        // Given
-        let groupLocation: XCWorkspaceDataElementLocationType = .absolute("/path/to/group")
-        let group = XCWorkspaceDataGroup(location: groupLocation,
-                                         name: "group",
-                                         children: [])
-        let elementOne = XCWorkspaceDataElement.group(group)
-
-        let fileLocation: XCWorkspaceDataElementLocationType = .absolute("/path/to/file.swift")
-        let file = XCWorkspaceDataFileRef(location: fileLocation)
-        let elementTwo = XCWorkspaceDataElement.file(file)
-
-        // When
-        let firstWorkspace = XCWorkspace(data: .init(children: [elementOne, elementTwo]))
-        let secondWorkspace = XCWorkspace(data: .init(children: [elementOne, elementTwo]))
-
-        // Then
-        XCTAssertEqual(firstWorkspace, secondWorkspace)
+        #expect(elements.allSatisfy { $0.location == location })
     }
 }

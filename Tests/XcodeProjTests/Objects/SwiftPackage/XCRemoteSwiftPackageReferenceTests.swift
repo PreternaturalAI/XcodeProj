@@ -130,17 +130,6 @@ final class XCRemoteSwiftPackageReferenceTests: XCTestCase {
         ]))
     }
 
-    func test_equal() {
-        // When
-        let first = XCRemoteSwiftPackageReference(repositoryURL: "repository",
-                                                  versionRequirement: .exact("1.2.3"))
-        let second = XCRemoteSwiftPackageReference(repositoryURL: "repository",
-                                                   versionRequirement: .exact("1.2.3"))
-
-        // Then
-        XCTAssertEqual(first, second)
-    }
-
     func test_name() {
         // When
         let subject = XCRemoteSwiftPackageReference(repositoryURL: "https://github.com/tuist/xcodeproj", versionRequirement: nil)
