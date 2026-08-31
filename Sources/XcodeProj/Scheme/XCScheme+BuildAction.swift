@@ -5,6 +5,11 @@ import XcodeProjPathKit
 public extension XCScheme {
     final class BuildAction: SerialAction {
         public final class Entry: Equatable {
+            public enum Reference: Equatable {
+                case buildable(BuildableReference)
+                case testPlan(TestPlanReference)
+            }
+
             public enum BuildFor: Sendable {
                 case running, testing, profiling, archiving, analyzing
                 public static let `default`: [BuildFor] = [.running, .testing, .archiving, .analyzing]
@@ -14,15 +19,31 @@ public extension XCScheme {
 
             // MARK: - Attributes
 
-            public var buildableReference: BuildableReference
+            public var reference: Reference
             public var buildFor: [BuildFor]
 
             // MARK: - Init
 
             public init(buildableReference: BuildableReference,
                         buildFor: [BuildFor]) {
-                self.buildableReference = buildableReference
+                self.reference = .buildable(buildableReference)
                 self.buildFor = buildFor
+            }
+
+            public init(testPlanReference: TestPlanReference,
+                        buildFor: [BuildFor]) {
+                self.reference = .testPlan(testPlanReference)
+                self.buildFor = buildFor
+            }
+
+            public var buildableReference: BuildableReference? {
+                guard case let .buildable(reference) = reference else { return nil }
+                return reference
+            }
+
+            public var testPlanReference: TestPlanReference? {
+                guard case let .testPlan(reference) = reference else { return nil }
+                return reference
             }
 
             init(element: AEXMLElement) throws {
@@ -43,7 +64,11 @@ public extension XCScheme {
                     buildFor.append(.analyzing)
                 }
                 self.buildFor = buildFor
-                buildableReference = try BuildableReference(element: element["BuildableReference"])
+                if element["BuildableReference"].all != nil {
+                    reference = .buildable(try BuildableReference(element: element["BuildableReference"]))
+                } else {
+                    reference = .testPlan(try TestPlanReference(element: element["TestPlanReference"]))
+                }
             }
 
             // MARK: - XML
@@ -58,14 +83,19 @@ public extension XCScheme {
                 let element = AEXMLElement(name: "BuildActionEntry",
                                            value: nil,
                                            attributes: attributes)
-                element.addChild(buildableReference.xmlElement())
+                switch reference {
+                case let .buildable(reference):
+                    element.addChild(reference.xmlElement())
+                case let .testPlan(reference):
+                    element.addChild(reference.xmlElement())
+                }
                 return element
             }
 
             // MARK: - Equatable
 
             public static func == (lhs: Entry, rhs: Entry) -> Bool {
-                lhs.buildableReference == rhs.buildableReference &&
+                lhs.reference == rhs.reference &&
                     lhs.buildFor == rhs.buildFor
             }
         }

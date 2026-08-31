@@ -9,6 +9,19 @@ final class XCSchemeIntegrationTests: XCTestCase {
         assert(scheme: subject)
     }
 
+    func test_buildActionEntry_testPlanReference_roundTrips() throws {
+        let subject = try XCScheme(path: testPlanOnlyBuildActionSchemePath)
+        let entry = try XCTUnwrap(subject.buildAction?.buildActionEntries.first)
+
+        XCTAssertNil(entry.buildableReference)
+        XCTAssertEqual(entry.testPlanReference?.reference, "container:WikipediaUITests.xctestplan")
+        XCTAssertTrue(entry.testPlanReference?.default == true)
+
+        let xml = try XCTUnwrap(subject.buildAction).xmlElement()
+        let reconstructed = try XCScheme.BuildAction(element: xml)
+        XCTAssertEqual(reconstructed, subject.buildAction)
+    }
+
     func test_write_iosScheme() throws {
         try testWrite(from: iosSchemePath,
                       initModel: { try? XCScheme(path: $0) },
@@ -483,11 +496,11 @@ final class XCSchemeIntegrationTests: XCTestCase {
         XCTAssertTrue(scheme.buildAction?.buildActionEntries.first?.buildFor.contains(.profiling) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries.first?.buildFor.contains(.archiving) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries.first?.buildFor.contains(.analyzing) == true)
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.buildableIdentifier, "primary")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.blueprintIdentifier, "23766C111EAA3484007A9026")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.buildableName, "iOS.app")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.blueprintName, "iOS")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.referencedContainer, "container:Project.xcodeproj")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.buildableIdentifier, "primary")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.blueprintIdentifier, "23766C111EAA3484007A9026")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.buildableName, "iOS.app")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.blueprintName, "iOS")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.referencedContainer, "container:Project.xcodeproj")
         XCTAssertEqual(scheme.buildAction?.preActions.first?.title, "Build Pre-action")
         XCTAssertEqual(scheme.buildAction?.preActions.first?.scriptText, "echo prebuild")
         XCTAssertNil(scheme.buildAction?.preActions.first?.shellToInvoke)
@@ -658,22 +671,22 @@ final class XCSchemeIntegrationTests: XCTestCase {
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[0].buildFor.contains(.profiling) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[0].buildFor.contains(.archiving) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[0].buildFor.contains(.analyzing) == true)
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.buildableIdentifier, "primary")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.blueprintIdentifier, "FE7C11D21B6DB70D0041DF02")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.buildableName, "Ava.app")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.blueprintName, "core-ava")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.referencedContainer, "container:core-ava.xcodeproj")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.buildableIdentifier, "primary")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.blueprintIdentifier, "FE7C11D21B6DB70D0041DF02")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.buildableName, "Ava.app")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.blueprintName, "core-ava")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.referencedContainer, "container:core-ava.xcodeproj")
 
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[1].buildFor.contains(.testing) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[1].buildFor.contains(.running) == false)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[1].buildFor.contains(.profiling) == false)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[1].buildFor.contains(.archiving) == false)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[1].buildFor.contains(.analyzing) == false)
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference.buildableIdentifier, "primary")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference.blueprintIdentifier, "9942115E25C4D3B7000711CE")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference.buildableName, "AvaTests.xctest")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference.blueprintName, "AvaTests")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference.referencedContainer, "container:core-ava.xcodeproj")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference?.buildableIdentifier, "primary")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference?.blueprintIdentifier, "9942115E25C4D3B7000711CE")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference?.buildableName, "AvaTests.xctest")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference?.blueprintName, "AvaTests")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[1].buildableReference?.referencedContainer, "container:core-ava.xcodeproj")
 
         // Test action
         XCTAssertEqual(scheme.testAction?.buildConfiguration, "Debug")
@@ -765,11 +778,11 @@ final class XCSchemeIntegrationTests: XCTestCase {
         XCTAssertTrue(scheme.buildAction?.buildActionEntries.first?.buildFor.contains(.profiling) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries.first?.buildFor.contains(.archiving) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries.first?.buildFor.contains(.analyzing) == true)
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.buildableIdentifier, "primary")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.blueprintIdentifier, "651BA89E1E459798004EAFE5")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.buildableName, "ais.xctest")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.blueprintName, "ais-Tests")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference.referencedContainer, "container:ais.xcodeproj")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.buildableIdentifier, "primary")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.blueprintIdentifier, "651BA89E1E459798004EAFE5")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.buildableName, "ais.xctest")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.blueprintName, "ais-Tests")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries.first?.buildableReference?.referencedContainer, "container:ais.xcodeproj")
 
         // Test action
         XCTAssertEqual(scheme.testAction?.buildConfiguration, "Debug")
@@ -857,11 +870,11 @@ final class XCSchemeIntegrationTests: XCTestCase {
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[0].buildFor.contains(.profiling) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[0].buildFor.contains(.archiving) == true)
         XCTAssertTrue(scheme.buildAction?.buildActionEntries[0].buildFor.contains(.analyzing) == true)
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.buildableIdentifier, "primary")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.blueprintIdentifier, "5CC725022DA91FB6004D43D4")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.buildableName, "app_clip.app")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.blueprintName, "app_clip")
-        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference.referencedContainer, "container:example.xcodeproj")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.buildableIdentifier, "primary")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.blueprintIdentifier, "5CC725022DA91FB6004D43D4")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.buildableName, "app_clip.app")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.blueprintName, "app_clip")
+        XCTAssertEqual(scheme.buildAction?.buildActionEntries[0].buildableReference?.referencedContainer, "container:example.xcodeproj")
 
         // Test action
         XCTAssertEqual(scheme.testAction?.buildConfiguration, "Debug")
@@ -947,6 +960,10 @@ final class XCSchemeIntegrationTests: XCTestCase {
 
     private var iosSchemePath: Path {
         fixturesPath() + "iOS/Project.xcodeproj/xcshareddata/xcschemes/iOS.xcscheme"
+    }
+
+    private var testPlanOnlyBuildActionSchemePath: Path {
+        fixturesPath() + "Schemes/TestPlanOnlyBuildAction.xcscheme"
     }
 
     private var minimalSchemePath: Path {
