@@ -17,7 +17,10 @@ public extension XCScheme {
         }
 
         init(element: AEXMLElement) throws {
-            reference = element.attributes["reference"]!
+            guard let reference = element.attributes["reference"] else {
+                throw XCSchemeError.missing(property: "reference")
+            }
+            self.reference = reference
             `default` = element.attributes["default"] == "YES"
         }
 

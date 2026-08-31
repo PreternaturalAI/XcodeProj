@@ -20,6 +20,16 @@ final class XCSchemeIntegrationTests: XCTestCase {
         let xml = try XCTUnwrap(subject.buildAction).xmlElement()
         let reconstructed = try XCScheme.BuildAction(element: xml)
         XCTAssertEqual(reconstructed, subject.buildAction)
+
+        let malformed = try XCTUnwrap(subject.buildAction).xmlElement()
+        malformed["BuildActionEntries"]["BuildActionEntry"]["TestPlanReference"]
+            .attributes.removeValue(forKey: "reference")
+        XCTAssertThrowsError(try XCScheme.BuildAction(element: malformed)) { error in
+            guard let error = error as? XCSchemeError,
+                  case .missing(property: "reference") = error else {
+                return XCTFail("Expected a missing reference error, got \(error)")
+            }
+        }
     }
 
     func test_write_iosScheme() throws {
