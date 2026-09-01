@@ -85,8 +85,10 @@ public class PBXFileSystemSynchronizedRootGroup: PBXFileElement {
 
     override var multiline: Bool { (exceptions?.count ?? 0) < 2 }
 
-    override func plistKeyAndValue(proj: PBXProj, reference: String) throws -> (key: CommentedString, value: PlistValue) {
-        var dictionary: [CommentedString: PlistValue] = try super.plistKeyAndValue(proj: proj, reference: reference).value.dictionary ?? [:]
+    override var plistComment: String? { name ?? path }
+
+    override func plistDictionary(proj: PBXProj) throws -> [CommentedString: PlistValue] {
+        var dictionary = try super.plistDictionary(proj: proj)
         dictionary["isa"] = .string(CommentedString(type(of: self).isa))
         if let exceptions, !exceptions.isEmpty {
             dictionary["exceptions"] = .array(exceptions.map { exception in
@@ -101,9 +103,7 @@ public class PBXFileSystemSynchronizedRootGroup: PBXFileElement {
         if let explicitFolders {
             dictionary["explicitFolders"] = .array(explicitFolders.map { .string(CommentedString($0)) })
         }
-        return (key: CommentedString(reference,
-                                     comment: name ?? path),
-                value: .dictionary(dictionary))
+        return dictionary
     }
 
     override func isEqual(to object: Any?) -> Bool {

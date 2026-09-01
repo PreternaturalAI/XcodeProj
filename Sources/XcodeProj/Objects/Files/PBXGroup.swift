@@ -68,17 +68,17 @@ public class PBXGroup: PBXFileElement {
 
     // MARK: - PlistSerializable
 
-    override func plistKeyAndValue(proj: PBXProj, reference: String) throws -> (key: CommentedString, value: PlistValue) {
-        var dictionary: [CommentedString: PlistValue] = try super.plistKeyAndValue(proj: proj, reference: reference).value.dictionary ?? [:]
+    override var plistComment: String? { name ?? path }
+
+    override func plistDictionary(proj: PBXProj) throws -> [CommentedString: PlistValue] {
+        var dictionary = try super.plistDictionary(proj: proj)
         dictionary["isa"] = .string(CommentedString(type(of: self).isa))
         dictionary["children"] = .array(childrenReferences.map { fileReference -> PlistValue in
             let fileElement: PBXFileElement? = fileReference.getObject()
             return .string(CommentedString(fileReference.value, comment: fileElement?.fileName()))
         })
 
-        return (key: CommentedString(reference,
-                                     comment: name ?? path),
-                value: .dictionary(dictionary))
+        return dictionary
     }
 
     override func isEqual(to object: Any?) -> Bool {

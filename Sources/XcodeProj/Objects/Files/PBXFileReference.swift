@@ -115,8 +115,10 @@ public final class PBXFileReference: PBXFileElement {
 
     override var multiline: Bool { false }
 
-    override func plistKeyAndValue(proj: PBXProj, reference: String) throws -> (key: CommentedString, value: PlistValue) {
-        var dictionary: [CommentedString: PlistValue] = try super.plistKeyAndValue(proj: proj, reference: reference).value.dictionary ?? [:]
+    override var plistComment: String? { name ?? path }
+
+    override func plistDictionary(proj: PBXProj) throws -> [CommentedString: PlistValue] {
+        var dictionary = try super.plistDictionary(proj: proj)
         dictionary["isa"] = .string(CommentedString(PBXFileReference.isa))
         if let lastKnownFileType {
             dictionary["lastKnownFileType"] = .string(CommentedString(lastKnownFileType))
@@ -142,8 +144,7 @@ public final class PBXFileReference: PBXFileElement {
         if let plistStructureDefinitionIdentifier {
             dictionary["plistStructureDefinitionIdentifier"] = .string(CommentedString(plistStructureDefinitionIdentifier))
         }
-        return (key: CommentedString(reference, comment: name ?? path),
-                value: .dictionary(dictionary))
+        return dictionary
     }
 
     override func isEqual(to object: Any?) -> Bool {

@@ -95,7 +95,9 @@ public class PBXFileElement: PBXContainerItem, PlistSerializable {
 
     var multiline: Bool { true }
 
-    func plistKeyAndValue(proj _: PBXProj, reference: String) throws -> (key: CommentedString, value: PlistValue) {
+    var plistComment: String? { name }
+
+    func plistDictionary(proj _: PBXProj) throws -> [CommentedString: PlistValue] {
         var dictionary: [CommentedString: PlistValue] = [:]
         dictionary["isa"] = .string(CommentedString(PBXFileElement.isa))
         if let name {
@@ -123,9 +125,14 @@ public class PBXFileElement: PBXContainerItem, PlistSerializable {
         if let wrapsLines {
             dictionary["wrapsLines"] = .string(CommentedString("\(wrapsLines.int)"))
         }
-        return (key: CommentedString(reference,
-                                     comment: name),
-                value: .dictionary(dictionary))
+        return dictionary
+    }
+
+    func plistKeyAndValue(proj: PBXProj, reference: String) throws -> (key: CommentedString, value: PlistValue) {
+        (
+            key: CommentedString(reference, comment: plistComment),
+            value: .dictionary(try plistDictionary(proj: proj))
+        )
     }
 
     /// Returns the name that should be used for comments.

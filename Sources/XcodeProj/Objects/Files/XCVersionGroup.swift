@@ -84,8 +84,12 @@ public final class XCVersionGroup: PBXGroup {
 
     // MARK: - XCVersionGroup Extension (PlistSerializable)
 
-    override func plistKeyAndValue(proj: PBXProj, reference: String) throws -> (key: CommentedString, value: PlistValue) {
-        var dictionary: [CommentedString: PlistValue] = try super.plistKeyAndValue(proj: proj, reference: reference).value.dictionary ?? [:]
+    override var plistComment: String? {
+        path?.split(separator: "/").last.map(String.init)
+    }
+
+    override func plistDictionary(proj: PBXProj) throws -> [CommentedString: PlistValue] {
+        var dictionary = try super.plistDictionary(proj: proj)
         dictionary["isa"] = .string(CommentedString(XCVersionGroup.isa))
         if let versionGroupType {
             dictionary["versionGroupType"] = .string(CommentedString(versionGroupType))
@@ -94,8 +98,7 @@ public final class XCVersionGroup: PBXGroup {
             let fileElement: PBXFileElement? = currentVersionReference.getObject()
             dictionary["currentVersion"] = .string(CommentedString(currentVersionReference.value, comment: fileElement?.fileName()))
         }
-        return (key: CommentedString(reference, comment: path?.split(separator: "/").last.map(String.init)),
-                value: .dictionary(dictionary))
+        return dictionary
     }
 
     override func isEqual(to object: Any?) -> Bool {

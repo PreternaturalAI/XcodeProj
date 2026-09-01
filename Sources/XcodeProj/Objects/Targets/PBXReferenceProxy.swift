@@ -59,10 +59,10 @@ public final class PBXReferenceProxy: PBXFileElement {
         try super.init(from: decoder)
     }
 
-    override func plistKeyAndValue(proj: PBXProj, reference: String) throws -> (key: CommentedString, value: PlistValue) {
-        guard case var .dictionary(dictionary) = try super.plistKeyAndValue(proj: proj, reference: reference).value else {
-            fatalError("super implementation changed and we didn’t realise!")
-        }
+    override var plistComment: String? { path }
+
+    override func plistDictionary(proj: PBXProj) throws -> [CommentedString: PlistValue] {
+        var dictionary = try super.plistDictionary(proj: proj)
         dictionary["isa"] = .string(CommentedString(PBXReferenceProxy.isa))
         if let fileType {
             dictionary["fileType"] = .string(CommentedString(fileType))
@@ -70,8 +70,7 @@ public final class PBXReferenceProxy: PBXFileElement {
         if let remoteReference {
             dictionary["remoteRef"] = .string(CommentedString(remoteReference.value, comment: "PBXContainerItemProxy"))
         }
-        return (key: CommentedString(reference, comment: path),
-                value: .dictionary(dictionary))
+        return dictionary
     }
 
     override func isEqual(to object: Any?) -> Bool {
